@@ -1,0 +1,1053 @@
+**12.33 (Search Web) Modify Listing 12.18 WebCrawler.java to search for the word
+Computer Programming starting from the URL http://cs.armstrong.edu/liang.
+Your program terminates once the word is found. Display the URL for the page
+that contains the word.
+
+import java.util.Scanner;
+
+public class SearchWeb{
+	public static void main(String[] args){
+		String startingURL = "http://cs.armstrong.edu/liang";
+		String keyWord = "Computer Programming";
+		System.out.println(search(startingURL, keyWord));
+	}
+
+	public static String search(String startingURL, String keyWord){
+		ArrayList<String> pendingURL = new ArrayList<>();
+		ArrayList<String> traversedURL = new ArrayLIst<>();
+
+		pendingURL.add(startingURL);
+
+		while(!pendingURL.isEmpty()){
+			String url=pendingURL.remove(0);
+
+			if(!traversedURL.contains(url){
+				traversedURL.add(url);
+				if(searchKeyWord(url)==true){
+					System.out.println(url);
+					System.exit();
+				}
+			}
+
+			for(String s: getSubURLs(url)){
+				if(!traversedURL.contains(s)){
+					pendingURL.add(s);
+				}
+			}	
+			
+		}
+	}
+
+
+	public static boolean searchKeyWord(String urlString){
+		java.net.URL url = new java.net.URL(urlString);
+		Scanner input = new Scanner(url.openStream());
+		while(input.hasNext()){
+			String line = input.nextLine();
+			if(line.contains("Computer Programming")){
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	public static ArrayList<String> getSubURLs(String urlString) throws IOExpection{
+		java.net.URL url = new java.net.URL(urlString);
+		Scanner input = new Scanner(url.openStream());
+		int currentIndex=0;
+		ArrayList<String> list = new ArrayList<>();
+
+		while(input.hasNext()){
+			String line = input.nextLine()
+			currentIndex=line.indexOf("http",currentIndex);
+			
+			while(currentIndex>0){
+				int endIndex = line.indexOf("\"",currentIndex);
+
+				if(endIndex>0){
+					list.add(line.substring(currentIndex, endIndux));
+					currentIndex=line.indexOf("http",endIndex);
+				}else{
+					currentIndex=-1;
+				}
+			}
+
+		}
+
+		return list;
+	}
+
+
+
+
+}
+
+
+===================================================================================================
+**13.1 (Triangle class) 
+Design a new Triangle class that extends the abstract GeometricObject class. 
+Draw the UML diagram for the classes Triangle and GeometricObject and then implement the Triangle class. 
+Write a test program that prompts the user to enter three sides of the triangle, a color, and a
+Boolean value to indicate whether the triangle is filled. 
+The program should create a Triangle object with these sides and set the color and filled properties using the input. 
+The program should display the area, perimeter, color, and true or false to indicate whether it is filled or not.
+
+import java.text.*;
+
+abstract class GeometricObject{
+	private String color="White";
+	private boolean filled;
+	private java.util.Date dateCreated;
+
+	protected GeometricObject(){
+		dateCreated=new java.util.Date();
+	}
+
+	protected GeometricObject(String color, boolean filled){
+		dateCreated=new java.util.Date();
+		this.color=color;
+		this.filled=filled;
+	}
+
+	public String getColor(){
+		return color;
+	}
+
+	public void setColor(String color){
+		this.color=color;
+	}
+
+	public boolean getFilled(){
+		return filled;
+	}
+
+	public void setFilled(boolean filled){
+		this.filled=filled;
+	}
+
+	public java.util.Date getDateCreated(){
+		return dateCreated;
+	}
+
+	public String toString(){
+		return "Date Created: "+dateCreated+"\nColor: "+color+"\nFilled: "+filled;
+	}
+
+	public abstract double getArea();
+
+	public abstract double getPerimeter();	
+
+}
+
+class Triangle extends GeometricObject{
+	private double side1;
+	private double side2;
+	private double side3;
+
+	public Triangle(double side1, double side2, double side3){
+		this.side1=side1;
+		this.side2=side2;
+		this.side3=side3;
+	}
+
+	public Triangle(){
+		this(1,1,1);
+	}
+
+	public double getPerimeter(){
+		return side1+side2+side3;
+	}
+
+	public double getArea(){
+		double s =getPerimeter()/2;
+		double area = Math.sqrt(s*(s-side1)*(s-side2)*(s-side3));
+		return area;
+	}
+
+
+	public String toString(){
+	    DecimalFormat df = new DecimalFormat("###.##");
+		return super.toString()+"\nPerimeter: "+df.format(getPerimeter())+"\nArea: "+df.format(getArea());
+		
+	}	
+}
+
+
+public class TestTriangle{
+	public static void main(String[] args){
+		Triangle t = new Triangle(4.5, 6, 8);
+		t.setColor("Orange");
+		t.setFilled(true);
+		System.out.println(t.toString());
+	}
+}
+
+=================================================================================================
+
+*13.2 (Shuffle ArrayList) Write the following method that shuffles an ArrayList of
+numbers:
+public static void shuffle(ArrayList<Number> list)
+
+import java.util.*;
+
+public class ShuffleArrayList{
+	public static void main(String[] args){
+		ArrayList<Number> list = new ArrayList<>();
+		list.add(33);
+		list.add(43);
+		list.add(80);
+		list.add(9);
+		list.add(12);
+		list.add(67);
+
+		shuffle(list);
+
+		for(int i=0;i<list.size();i++){
+			System.out.print(list.get(i)+" ");
+		}
+	}
+
+	public static void shuffle(ArrayList<Number> list){
+		Number temp;
+		int index;
+
+		for(int i=0;i<list.size();i++){
+			index=(int)(Math.random()*list.size());
+			temp=list.get(i);
+			list.set(i, list.get(index));
+			list.set(index,temp);
+		}
+	}
+}
+
+=================================================================================================
+*13.3 (Sort ArrayList) Write the following method that sorts an ArrayList of numbers.
+public static void sort(ArrayList<Number> list)
+
+import java.util.*;
+
+public class SortArrayList{
+	public static void main(String[] args){
+		ArrayList<Number> list = new ArrayList<>();
+		list.add(33);
+		list.add(43);
+		list.add(80);
+		list.add(9);
+		list.add(12);
+		list.add(67);
+
+		sort(list);
+
+		for(int i=0;i<list.size();i++){
+			System.out.print(list.get(i)+" ");
+		}
+	}
+
+	public static void sort(ArrayList<Number> list){
+		Number min, temp;
+		int index;
+		
+		for(int i=0;i<list.size();i++){
+			min=list.get(i);
+			index=i;
+			for(int j=i+1;j<list.size();j++){
+				if(list.get(j).doubleValue()<min.doubleValue()){
+					min=list.get(j);
+					index=j;
+				}
+			}
+
+			temp=list.get(i);
+			list.set(i,min);
+			list.set(index,temp);
+		}
+	}
+}
+
+=================================================================================================
+
+/*
+13.4 (Display calendars) Rewrite the PrintCalendar class in Listing 6.12 to display
+a calendar for a specified month using the Calendar and GregorianCalendar
+classes. Your program receives the month and year from the command line. For
+example:
+
+java Exercise13_04 5 2016
+
+You also can run the program without the year. In this case, the year is the current
+year. If you run the program without specifying a month and a year, the month is
+the current month.
+*/
+
+import java.util.Scanner;
+import java.util.GregorianCalendar;
+
+public class PrintCalendar{
+	public static void main(String[] args){
+		GregorianCalendar c;
+		GregorianCalendar current = new GregorianCalendar();
+		
+		if(args.length=0){
+			c=current;
+		}else if(args.length==1){
+			if(args[0].length()!=4 && args[0]>=1 &&args[0]<=12){
+				int month=args[0];
+				c=new GregorianCalendar(current.get(Calendar.Year)),month,1);
+
+			}else if(args[0].length()==4){
+				int year=args[0];
+				c=new GregorianCalendar(year, current.get(Calendar.MONTH)),1);
+			}else{
+				System.out.println("please enter a proper year and/or month);
+				System.exit();
+			}	
+
+		}else if(args.length==2){
+			int month=Integer.parseInt(args[0]);
+			int year=Integer.parseInt(args[1]);
+
+			if(month<1 || month>12){
+				System.out.println("Please enter a month between 1 to 12");
+				System.exit();
+			}
+
+			c = new GregorianCalendar(year, month,1);
+
+		}else{
+			System.out.println("java program month year");
+			System.exit();
+		}
+
+
+		printMonthTitle(c);
+		printMonthBody(c);
+	}
+
+	public static void printMonthTitle(GregorianCalendar c){
+		int month = c.get(Calendar.MONTH);
+
+		switch(month){
+			case 1: monthName="January";break;
+			case 2: monthName="February";break;
+			case 3: monthName="March";break;
+			case 4: monthName="April";break;
+			case 5: monthName="May";break;
+			case 6: monthName="June";break;
+			case 7: monthName="July";break;
+			case 8: monthName="August";break;
+			case 9: monthName="September";break;
+			case 10: monthName="October";break;
+			case 11: monthName="November";break;
+			case 12: monthName="December";
+		}
+
+		System.out.println("      "+month+" "+year);
+		System.out.println("-------------------------------");
+		System.out.println("Sun Mon Tue Wed Thu Fri Sat");
+	}
+
+	
+	public static void printMonthBody(GregorianCalendar c){
+		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK); //0 is Sunday
+		int month = c.get(Calendar.MONTH); //0 is January
+		int year=c.get(Calendar.YEAR)
+		int numberOfDays = getNumberOfDays(year, month);
+
+		for(int j=0;j<=4*dayOfWeek;j++){
+			System.out.print(" ");
+		}
+
+		for(int i=1;i<=numberOfDays;i++){
+			System.out.printf("%4d",i);
+			if((i+dayOfWeek)%7==0){
+				System.out.println();
+			}
+		}
+		
+	}
+
+
+	public static int getNumberOfDays(int year, int month){
+		if (month == 1 || month == 3 || month == 5 || month ==7 || month == 8 || month == 10 || month == 12)
+			return 31;
+
+		if (month == 4 || month == 6 || month == 9 || month ==11)
+			return 30;
+
+		if (month == 2) return isLeapYear(year) ? 29 : 28;
+
+			return 0; // If month is incorrect
+	}
+
+
+	/** Determine if it is a leap year */
+	public static boolean isLeapYear(int year) {
+		return year % 400 == 0 || (year % 4 == 0 && year % 100 !=0);
+	}
+}
+
+=================================================================================================
+
+*13.5 (Enable GeometricObject comparable) Modify the GeometricObject class
+to implement the Comparable interface, and define a static max method in the
+GeometricObject class for finding the larger of two GeometricObject objects.
+Draw the UML diagram and implement the new GeometricObject class. Write
+a test program that uses the max method to find the larger of two circles and the
+larger of two rectangles.
+
+import java.text.*;
+
+abstract class GeometricObject implements Comparable<GeometricObject>{
+	private String color="White";
+	private boolean filled;
+	private java.util.Date dateCreated;
+
+	protected GeometricObject(){
+		dateCreated=new java.util.Date();
+	}
+
+	protected GeometricObject(String color, boolean filled){
+		dateCreated=new java.util.Date();
+		this.color=color;
+		this.filled=filled;
+	}
+
+	public String getColor(){
+		return color;
+	}
+
+	public void setColor(String color){
+		this.color=color;
+	}
+
+	public boolean getFilled(){
+		return filled;
+	}
+
+	public void setFilled(boolean filled){
+		this.filled=filled;
+	}
+
+	public java.util.Date getDateCreated(){
+		return dateCreated;
+	}
+
+	public String toString(){
+		return "Date Created: "+dateCreated+"\nColor: "+color+"\nFilled: "+filled;
+	}
+
+	public int compareTo(GeometricObject t){
+		if(getArea()==t.getArea()){
+			return 0;
+		}else if(getArea()>t.getArea()){
+			return 1;
+		}else{
+			return -1;
+		}
+	}
+
+	public abstract double getArea();
+
+	public abstract double getPerimeter();	
+
+}
+
+class Triangle extends GeometricObject{
+	private double side1;
+	private double side2;
+	private double side3;
+
+	public Triangle(double side1, double side2, double side3){
+		this.side1=side1;
+		this.side2=side2;
+		this.side3=side3;
+	}
+
+	public Triangle(){
+		this(1,1,1);
+	}
+
+	public double getPerimeter(){
+		return side1+side2+side3;
+	}
+
+	public double getArea(){
+		double s =getPerimeter()/2;
+		double area = Math.sqrt(s*(s-side1)*(s-side2)*(s-side3));
+		return area;
+	}
+
+
+	public String toString(){
+	    DecimalFormat df = new DecimalFormat("###.##");
+		return super.toString()+"\nPerimeter: "+df.format(getPerimeter())+"\nArea: "+df.format(getArea());
+		
+	}
+	
+
+}
+
+
+public class TestTriangle{
+	public static void main(String[] args){
+		Triangle t1 = new Triangle(4.5, 6, 8);
+		Triangle t2 = new Triangle(4.5, 6, 8);
+		System.out.println(t1.compareTo(t2));
+	}
+}
+
+================================================================================
+
+*13.7 (The Colorable interface) Design an interface named Colorable with a void
+method named howToColor(). Every class of a colorable object must implement
+the Colorable interface. Design a class named Square that extends
+GeometricObject and implements Colorable. Implement howToColor to
+display the message Color all four sides.
+Draw a UML diagram that involves Colorable, Square, and GeometricObject.
+Write a test program that creates an array of five GeometricObjects. For each
+object in the array, display its area and invoke its howToColor method if it is
+colorable.
+
+
+public interface Colorable{
+	public abstract void howToColor();
+}
+
+public class Square extends GeometricObject implements Colorable{
+	private double side;
+
+	public Square(double side){
+		this.side=side;
+	}
+
+	public Square(){
+		this(1);
+	}
+
+	public double getArea(){
+		return side*side;
+	}
+
+	public double getPerimeter(){
+		return 4*side;
+	}
+
+	public void howToColor(){
+		System.out.println("Color all four sides");
+	}
+	
+
+}
+
+================================================================================
+
+*13.8 (Revise the MyStack class) Rewrite the MyStack class in Listing 11.10 to perform
+a deep copy of the list field.
+
+import java.util.ArrayList;
+
+public class MyStack implements Cloneable{
+	private ArrayList<Object> list = new ArrayList<>();
+
+    public MyStack(ArrayList list){
+        this.list=list;
+    }
+	public boolean isEmpty() {
+		return list.isEmpty();
+	}
+
+	public int getSize() {
+		return list.size();
+	}
+
+	public Object peek() {
+		return list.get(getSize() - 1);
+	}
+
+	public Object pop() {
+		Object o = list.get(getSize()-1);
+		list.remove(getSize() - 1);
+		return o;
+	}
+
+	public void push(Object o) {
+		list.add(o);
+	}
+
+
+ 	@Override
+	public String toString() {
+		return "stack: " + list.toString();
+	}
+
+    @Override
+	public Object clone() throws CloneNotSupportedException{
+		MyStack stackClone = (MyStack)super.clone();
+		stackClone.list=(ArrayList<Object>)list.clone();
+		return stackClone;
+	}
+	
+	public static void main(String[] args){
+	        ArrayList<Integer> arrayList = new ArrayList<>();
+	        arrayList.add(3);
+	        arrayList.add(1);
+	        MyStack list=new MyStack(arrayList);
+	        try{
+	            MyStack listClone=(MyStack)list.clone();
+	            System.out.println(list==listClone);
+	        }catch(CloneNotSupportedException ex){
+	            System.out.println(ex.getMessage());
+	        }
+	        
+	}
+
+}
+=======================================================
+
+*13.9 (Enable Circle comparable) Rewrite the Circle class in Listing 13.2 to extend
+GeometricObject and implement the Comparable interface. Override the
+equals method in the Object class. Two Circle objects are equal if their radii
+are the same. Draw the UML diagram that involves Circle, GeometricObject,
+and Comparable.
+
+public class Circle extends GeometricObject implments Comparable<Circle>{
+	private double radius;
+
+	public Circle(double radius){
+		this.radius=radius;
+	}
+
+	public double getRadius(){
+		return radius;
+	}
+
+	@Override
+	public double getArea(){
+		return 3.14159*radius*radius;
+	}
+
+	@Override
+	public double getPerimeter(){
+		return 2*3.14159*radius;
+	}
+
+	@Override 
+	public int compareTo(Object o){
+		if(getArea()==(Circle)o.getArea()){
+			return 0;
+		}else if(getArea()>(Circle)o.getArea()){
+			return 1;
+		}else{
+			return -1;
+		}
+	}
+
+	@Override
+	public boolean equals(object o){
+		if(this.radius==o.getRadius()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+}
+
+======================================================
+
+*13.11 (The Octagon class) Write a class named Octagon that extends
+GeometricObject and implements the Comparable and Cloneable interfaces.
+Assume that all eight sides of the octagon are of equal length. The area can
+be computed using the following formula:
+
+area = (2 + 4/22)* side * side
+
+Draw the UML diagram that involves Octagon, GeometricObject,
+Comparable, and Cloneable. Write a test program that creates an Octagon
+object with side value 5 and displays its area and perimeter. Create a new object
+using the clone method and compare the two objects using the compareTo
+method.
+
+public class Octagon extends GeometricObject implements Comparable, Cloneable{
+	private double side;
+
+	public Octagon(double side){
+		this.side=side;
+	}
+
+	public double getSide(){
+		return side;
+	}
+
+	public void setSide(double side){
+		this.side=side;
+	}
+
+	@override
+	public double getArea(){
+		return (2+4/22)*side*side;
+	}
+
+	@override
+	public double getPerimeter(){
+		return 8*side;
+	}
+
+	@override
+	public int compareTo(Object o){
+		if(getArea()==(Octagon)o.getArea()){
+			return 0;
+		}else if(getArea()>(Octagon)o.getArea()){
+			return 1;
+		}else{
+			return -1;
+		}
+	}
+
+	@override
+	public Object clone() throws CloneNotSupportedException{
+		Octagon octagonClone=(Octagon)super.clone();
+		octagonClone.dateCreated=(java.util.Date)(dateCreated.clone());
+		return octagonClone;
+	}
+
+	public static void main(String[] args){
+		Octagon original = new Octagon(5);
+		System.out.println("Area: "+original.getArea());
+		System.out.priintln("Perimeter: "+original.getPerimeter());
+	
+		Octagon clone = original.clone();
+		System.out.println(original.compareTo(clone));
+	}
+}
+
+
+
+
+======================================================
+*13.12 (Sum the areas of geometric objects) Write a method that sums the areas of all the
+geometric objects in an array. The method signature is:
+public static double sumArea(GeometricObject[] a)
+Write a test program that creates an array of four objects (two circles and two
+rectangles) and computes their total area using the sumArea method.
+
+
+public class SumGeometricObjects{
+	public static void main(String[] args){
+		GeometricObject[] geometricObjects = new GeometricObject[4];
+		geometricObject[0]=new Circle(1);
+		geometricObject[1]=new Circle(2);
+		geometricObject[2]=new Triangle(3);
+		geometricObject[3]=new Triangle(4);
+
+		System.out.println(sumArea(geometricObjects));
+	}
+
+	public static double sumArea(GeometricObject[] a){
+		double sum=0;
+		for(GeometricObject o: a){
+			sum=sum+o.getArea();
+		}
+
+		return sum;
+	}
+}
+
+======================================================
+
+*13.14 (Demonstrate the benefits of encapsulation) Rewrite the Rational class in
+Listing 13.13 using a new internal representation for the numerator and denominator.
+Create an array of two integers as follows:
+
+private long[] r = new long[2];
+
+Use r[0] to represent the numerator and r[1] to represent the denominator.
+The signatures of the methods in the Rational class are not changed, so a client
+application that uses the previous Rational class can continue to use this new
+Rational class without being recompiled.
+
+public class Rational extends Number implements Comparable<Rational> {
+	// Data fields for numerator and denominator
+	private long numerator = 0;
+	private long denominator = 1;
+
+	/** Construct a rational with default properties */
+	public Rational() {
+		this(0, 1);
+	}
+
+	/** Construct a rational with specified numerator and denominator */
+	public Rational(long numerator, long denominator) {
+		long gcd = gcd(numerator, denominator);
+		this.numerator = ((denominator > 0) ? 1 : -1) * numerator / gcd;
+		this.denominator = Math.abs(denominator) / gcd;
+	}
+
+	/** Find GCD of two numbers */
+	private static long gcd(long n, long d) {
+		long n1 = Math.abs(n);
+		long n2 = Math.abs(d);
+		int gcd = 1;
+
+		for (int k = 1; k <= n1 && k <= n2; k++) {
+			if (n1 % k == 0 && n2 % k == 0)
+			gcd = k;
+		}
+
+		return gcd;
+	}
+
+	/** Return numerator */
+	public long getNumerator() {
+		return numerator;
+	}
+
+	/** Return denominator */
+	public long getDenominator() {
+		return denominator;
+	}
+
+	/** Add a rational number to this rational */
+	public Rational add(Rational secondRational) {
+		long n = numerator * secondRational.getDenominator() +
+		denominator * secondRational.getNumerator();
+		long d = denominator * secondRational.getDenominator();
+		return new Rational(n, d);
+	}
+
+	/** Subtract a rational number from this rational */
+	public Rational subtract(Rational secondRational) {
+	long n = numerator * secondRational.getDenominator()- denominator * secondRational.getNumerator();
+	long d = denominator * secondRational.getDenominator();
+	return new Rational(n, d);
+	}
+
+	/** Multiply a rational number by this rational */
+	public Rational multiply(Rational secondRational) {
+		long n = numerator * secondRational.getNumerator();
+		long d = denominator * secondRational.getDenominator();
+		return new Rational(n, d);
+	}
+
+	/** Divide a rational number by this rational */
+	public Rational divide(Rational secondRational) {
+		long n = numerator * secondRational.getDenominator();
+		long d = denominator * secondRational.numerator;
+		return new Rational(n, d);
+	}
+
+	@Override
+	public String toString() {
+		if (denominator == 1)
+		return numerator + "";
+		else
+		return numerator + "/" + denominator;
+		}
+
+	@Override // Override the equals method in the Object class
+	public boolean equals(Object other) {
+		if ((this.subtract((Rational)(other))).getNumerator() == 0)
+			return true;
+		else
+			return false;
+		}
+
+	@Override // Implement the abstract intValue method in Number
+	public int intValue() {
+		return (int)doubleValue();
+	}
+
+	@Override // Implement the abstract floatValue method in Number
+	public float floatValue() {
+		return (float)doubleValue();
+	}
+
+	@Override // Implement the doubleValue method in Number
+	public double doubleValue() {
+		return numerator * 1.0 / denominator;
+	}
+
+	@Override // Implement the abstract longValue method in Number
+	public long longValue() {
+		return (long)doubleValue();
+	}
+
+	@Override // Implement the compareTo method in Comparable
+	public int compareTo(Rational o) {
+		if (this.subtract(o).getNumerator() > 0)
+			return 1;
+		else if (this.subtract(o).getNumerator() < 0)
+			return -1;
+		else
+			return 0;
+		}
+	}
+
+=====================================================================================
+
+public class Rational2 extends Number implements Comparable<Rational> {
+	// Data fields for numerator and denominator
+	private Long[] numbers = {0,1};
+
+	/** Construct a rational with default properties */
+	public Rational2() {
+		this(0, 1);
+	}
+
+	/** Construct a rational with specified numerator and denominator */
+	public Rational2(long numerator, long denominator) {
+		long gcd = gcd(long numerator, long denominator);
+		this.numbers[0] = ((denominator > 0) ? 1 : -1) * numerator / gcd;
+		this.numbers[1] = Math.abs(denominator) / gcd;
+	}
+
+	/** Find GCD of two numbers */
+	private static long gcd(long n, long d) {
+		long n1 = Math.abs(n);
+		long n2 = Math.abs(d);
+		int gcd = 1;
+
+		for (int k = 1; k <= n1 && k <= n2; k++) {
+			if (n1 % k == 0 && n2 % k == 0)
+			gcd = k;
+		}
+
+		return gcd;
+	}
+
+	/** Return numerator */
+	public long getNumerator() {
+		return numbers[0];
+	}
+
+	/** Return denominator */
+	public long getDenominator() {
+		return numbers[1];
+	}
+
+	/** Add a rational2 number to this rational */
+	public Rational2 add(Rational2 secondRational) {
+		long n = numbers[0] * secondRational.getDenominator() + numbers[1] * secondRational.getNumerator();
+		long d = numbers[1] * secondRational.getDenominator();
+		return new Rational2(n, d);
+	}
+
+	/** Subtract a rational number from this rational */
+	public Rational2 subtract(Rational2 secondRational) {
+		long n = numbers[0] * secondRational.getDenominator()- numbers[1] * secondRational.getNumerator();
+		long d = numbers[1] * secondRational.getDenominator();
+		return new Rational2(n, d);
+	}
+
+	/** Multiply a rational number by this rational */
+	public Rational2 multiply(Rational2 secondRational) {
+		long n = numbers[0] * secondRational.getNumerator();
+		long d = numbers[1] * secondRational.getDenominator();
+		return new Rational2(n, d);
+	}
+
+	/** Divide a rational number by this rational */
+	public Rational2 divide(Rational2 secondRational) {
+		long n = numbers[0] * secondRational.getDenominator();
+		long d = numbers[1] * secondRational.numerator;
+		return new Rational2(n, d);
+	}
+
+	@Override
+	public String toString() {
+		if (numbers[1] == 1)
+		return numbers[0] + "";
+		else
+		return numbers[0] + "/" + numbers[1];
+		}
+
+	@Override // Override the equals method in the Object class
+	public boolean equals(Object other) {
+		if ((this.subtract((Rational2)(other))).getNumerator() == 0)
+			return true;
+		else
+			return false;
+		}
+
+	@Override // Implement the abstract intValue method in Number
+	public int intValue() {
+		return (int)doubleValue();
+	}
+
+	@Override // Implement the abstract floatValue method in Number
+	public float floatValue() {
+		return (float)doubleValue();
+	}
+
+	@Override // Implement the doubleValue method in Number
+	public double doubleValue() {
+		return numbers[0] * 1.0 / numbers[1];
+	}
+
+	@Override // Implement the abstract longValue method in Number
+	public long longValue() {
+		return (long)doubleValue();
+	}
+
+	@Override // Implement the compareTo method in Comparable
+	public int compareTo(Rational o) {
+		if (this.subtract(o).getNumerator() > 0)
+			return 1;
+		else if (this.subtract(o).getNumerator() < 0)
+			return -1;
+		else
+			return 0;
+		}
+	}
+
+===========================================================================
+
+*13.16 (Create a rational-number calculator) Write a program similar to Listing 7.9,
+Calculator.java. Instead of using integers, use rationals, as shown in Figure 13.10a.
+You will need to use the split method in the String class, introduced in
+Section 10.10.3, Replacing and Splitting Strings, to retrieve the numerator string and
+denominator string, and convert strings into integers using the Integer.parseInt
+method.
+java Exercose13_16 "3/4 + 1/5"
+3/4 + 1/5 = 19/20
+
+
+public class RationalCalculator{
+	public static void main(String[] args){
+		String question = args[0];
+		String[] questionArray = question.split(" ");
+
+		int numerator1 = Integer.parseInt(questionArray[0].charAt[0]);
+		int denominator1 = Integer.parseInt(questionArray[0].charAt[2]);
+		int numerator2 = Integer.parseInt(questionArray[0].charAt[0]);
+		int denominator2= Integer.parseInt(questionArray[0].charAt[2]);
+
+		Rational rationalNum1 = new Rational(numerator1, denominator1);
+		Rational rationalNum2 = new Rational(numerator2, denominator2);
+		Rational answer;
+
+		char operator = questionArray[1];
+	
+		switch operator{
+			case '+': answer=rationalNum1.add(rationalNum2);
+			case '-': answer=rationalNum1.subtract(rationalNum2);
+			case '.': answer=rationalNum1.multiply(rationalNum2);
+			case '/': answer=rationalNum1.divide(rationalNum2);
+		}
+
+		System.out.println(question+" = "+answer.getNumerator()+"/"+answer.getDenominator());
+
+	}
+}
+
+
+
+===========================================================================
+
+
+
+
+
+
+
+
+
